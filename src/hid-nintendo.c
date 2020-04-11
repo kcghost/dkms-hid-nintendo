@@ -882,33 +882,13 @@ static void joycon_parse_report(struct joycon_ctlr *ctlr,
 			/* Report the S buttons as the non-existent triggers */
 			input_report_key(dev, BTN_TR, btns & JC_BTN_SL_L);
 			input_report_key(dev, BTN_TR2, btns & JC_BTN_SR_L);
-
-			/* Report d-pad as digital buttons for the joy-cons */
-			input_report_key(dev, BTN_DPAD_DOWN,
-					 btns & JC_BTN_DOWN);
-			input_report_key(dev, BTN_DPAD_UP, btns & JC_BTN_UP);
-			input_report_key(dev, BTN_DPAD_RIGHT,
-					 btns & JC_BTN_RIGHT);
-			input_report_key(dev, BTN_DPAD_LEFT,
-					 btns & JC_BTN_LEFT);
-		} else {
-			int hatx = 0;
-			int haty = 0;
-
-			/* d-pad x */
-			if (btns & JC_BTN_LEFT)
-				hatx = -1;
-			else if (btns & JC_BTN_RIGHT)
-				hatx = 1;
-			input_report_abs(dev, ABS_HAT0X, hatx);
-
-			/* d-pad y */
-			if (btns & JC_BTN_UP)
-				haty = -1;
-			else if (btns & JC_BTN_DOWN)
-				haty = 1;
-			input_report_abs(dev, ABS_HAT0Y, haty);
 		}
+
+		/* Report d-pad as digital buttons */
+		input_report_key(dev, BTN_DPAD_DOWN, btns & JC_BTN_DOWN);
+		input_report_key(dev, BTN_DPAD_UP, btns & JC_BTN_UP);
+		input_report_key(dev, BTN_DPAD_RIGHT, btns & JC_BTN_RIGHT);
+		input_report_key(dev, BTN_DPAD_LEFT, btns & JC_BTN_LEFT);
 	}
 	if (jc_type_has_right(ctlr)) {
 		u16 raw_x;
@@ -1243,19 +1223,9 @@ static int joycon_input_create(struct joycon_ctlr *ctlr)
 			input_set_capability(ctlr->input, EV_KEY,
 					     joycon_button_inputs_l[i]);
 
-		/* configure d-pad differently for joy-con vs pro controller */
-		if (hdev->product != USB_DEVICE_ID_NINTENDO_PROCON) {
-			for (i = 0; joycon_dpad_inputs_jc[i] > 0; i++)
-				input_set_capability(ctlr->input, EV_KEY,
-						     joycon_dpad_inputs_jc[i]);
-		} else {
-			input_set_abs_params(ctlr->input, ABS_HAT0X,
-					     -JC_MAX_DPAD_MAG, JC_MAX_DPAD_MAG,
-					     JC_DPAD_FUZZ, JC_DPAD_FLAT);
-			input_set_abs_params(ctlr->input, ABS_HAT0Y,
-					     -JC_MAX_DPAD_MAG, JC_MAX_DPAD_MAG,
-					     JC_DPAD_FUZZ, JC_DPAD_FLAT);
-		}
+		for (i = 0; joycon_dpad_inputs_jc[i] > 0; i++)
+			input_set_capability(ctlr->input, EV_KEY,
+					     joycon_dpad_inputs_jc[i]);
 	}
 	if (jc_type_has_right(ctlr)) {
 		input_set_abs_params(ctlr->input, ABS_RX,
