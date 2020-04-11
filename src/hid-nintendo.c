@@ -1424,8 +1424,8 @@ static int joycon_leds_create(struct joycon_ctlr *ctlr)
 
 		led = &ctlr->leds[i];
 		led->name = name;
-		led->brightness = ((i + 1) <= input_num) ? LED_ON : LED_OFF;
-		led->max_brightness = LED_ON;
+		//led->brightness = ((i + 1) <= input_num) ? LED_ON : LED_OFF;
+		//led->max_brightness = LED_ON;
 		led->brightness_set_blocking =
 					joycon_player_led_brightness_set;
 		led->flags = LED_CORE_SUSPENDRESUME | LED_HW_PLUGGABLE;
