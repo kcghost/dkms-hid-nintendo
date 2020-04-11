@@ -1145,13 +1145,13 @@ static int joycon_play_effect(struct input_dev *dev, void *data,
 }
 
 static const unsigned int joycon_button_inputs_l[] = {
-	BTN_SELECT, BTN_Z, BTN_THUMBL,
+	BTN_SELECT, BTN_THUMBL,
 	BTN_TL, BTN_TL2,
 	0 /* 0 signals end of array */
 };
 
 static const unsigned int joycon_button_inputs_r[] = {
-	BTN_START, BTN_MODE, BTN_THUMBR,
+	BTN_START, BTN_THUMBR,
 	BTN_SOUTH, BTN_EAST, BTN_NORTH, BTN_WEST,
 	BTN_TR, BTN_TR2,
 	0 /* 0 signals end of array */
